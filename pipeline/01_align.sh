@@ -1,6 +1,6 @@
 #!/usr/bin/bash -l
-#SBATCH -N 1 -n 16 --mem 32gb --out logs/bwa.%a.log --time 8:00:00
-module load bwa
+#SBATCH -N 1 -n 16 --mem 32gb --out logs/align.%a.log --time 8:00:00
+module load minimap2
 module load samtools
 module load picard
 module load gatk/4
@@ -68,8 +68,7 @@ do
         if [ ! -s $SRTED ]; then
           if [ -e $PAIR1 ]; then
             if [ ! -f $SRTED ]; then
-              # potential switch this to bwa-mem2 for extra speed
-              bwa mem -t $CPU -R $READGROUP $REFGENOME $FASTQFOLDER/$BASEPATTERN | samtools sort --threads $CPU -O bam -o $SRTED -T $TEMP -
+		    minimap2 -ax map-pb -t $CPU $REFGENOME $FASTQFOLDER/$BASEPATTERN | samtools sort --threads $CPU -O bam -o $SRTED -T $TEMP -
             fi
           else
             echo "Cannot find $BASEPATTERN, skipping $STRAIN"
