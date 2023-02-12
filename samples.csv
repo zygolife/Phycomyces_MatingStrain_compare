@@ -1,2 +1,3 @@
 STRAIN,FILEBASE
-UBC21,pbio-2048.18190.filter.fastq.gz;pbio-2049.18218.filter.fastq.gz
+UBC21_ill,UBC21_R[12].fq.gz
+UBC21_pacbio,pbio-2048.18190.filter.fastq.gz;pbio-2049.18218.filter.fastq.gz
