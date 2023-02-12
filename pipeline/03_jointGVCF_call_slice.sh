@@ -1,5 +1,5 @@
 #!/usr/bin/bash -l
-#SBATCH -p short --mem 24G -N 1 -n 1 -c 2 -J slice.GVCFGeno --out logs/GVCFGenoGATK4.slice_%a.%A.log -a 1-8
+#SBATCH -p short --mem 24G -N 1 -n 1 -c 2 -J slice.GVCFGeno --out logs/GVCFGenoGATK4.slice_%a.%A.log -a 1-80
 # might run on short queue if small enough
 # match array jobs (-a 1-4) to the number of chromosomes - if you have a lot then you can change the GVCF_INTERVAL in config.txt
 # and then can run in batches of 5, 10 etc to combine ranges to run through
@@ -14,19 +14,9 @@ module load parallel
 module load yq
 module load workspace/scratch
 
+GVCF_INTERVAL=1
 source config.txt
 
-#declare -x TEMPDIR=$TEMP/$USER/$$
-
-#cleanup() {
-	#echo "rm temp is: $TEMPDIR"
-#	rm -rf $TEMPDIR
-#}#
-
-# Set trap to ensure cleanupis stopped
-#trap "cleanup; rm -rf $TEMPDIR; exit" SIGHUP SIGINT SIGTERM EXIT
-
-GVCF_INTERVAL=1
 N=${SLURM_ARRAY_TASK_ID}
 
 if [ -z $N ]; then
@@ -181,7 +171,3 @@ do
 	    tabix $SELECTINDEL.gz
 	fi
 done
-
-if [ -d $TEMPDIR ]; then
-	rmdir $TEMPDIR
-fi
